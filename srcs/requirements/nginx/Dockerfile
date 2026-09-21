@@ -1,6 +1,6 @@
 FROM debian:bookworm
 
-RUN apt-get update && apt-get install -y nginx vim curl openssl
+RUN apt-get update && apt-get upgrade -y && apt-get install -y nginx vim curl openssl
 RUN mkdir -p /etc/nginx/ssl
 
 RUN openssl req -x509 -nodes \
