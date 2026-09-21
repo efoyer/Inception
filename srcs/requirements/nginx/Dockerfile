@@ -12,11 +12,6 @@ RUN mkdir -p /var/run/nginx
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 RUN chmod 755 /var/www/html && chown -R www-data:www-data /var/www/html
 
-
-# Creer une petite page HTML pour tester NGINX
-RUN mkdir -p /var/www/wordpress
-RUN echo "<h1>Nginx est en ligne et SSL fonctionne !</h1>" > /var/www/wordpress/index.html
-
 CMD ["nginx", "-g", "daemon off;"]
 
 # COPY ./tools/script.sh /
