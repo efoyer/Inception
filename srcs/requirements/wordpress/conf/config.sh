@@ -1,6 +1,7 @@
 #!/bin/bash
 if [ ! -f "/var/www/wordpress/wp-config.php" ]; then
     wp core download --allow-root
+    sleep 15
     wp config create --allow-root \
                     --dbname=$SQL_DATABASE \
                     --dbuser=$SQL_USER \
@@ -8,7 +9,7 @@ if [ ! -f "/var/www/wordpress/wp-config.php" ]; then
                     --dbhost=mariadb:3306
 
     wp core install --allow-root \
-                    --url="efoyer.42.fr" \
+                    --url="https://efoyer.42.fr" \
                     --title="Inception" \
                     --admin_user="${WP_ADMIN_USER}" \
                     --admin_password="${WP_ADMIN_PASSWORD}" \
