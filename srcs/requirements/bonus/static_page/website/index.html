@@ -5,14 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S K I B I D I  R I Z Z  Z O N E</title>
     <style>
+        /* Base styles & resets */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            font-family: "Comic Sans MS", "Impact", cursive, sans-serif;
+            background-color: #000;
+        }
+
+        /* Warning Screen Styles */
+        #warning-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 9999999;
+            padding: 20px;
+        }
+
+        #warning-screen h1 {
+            color: #ff0000;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        #warning-screen p {
+            font-size: 1.5rem;
+            color: #fff;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        #enter-btn {
+            background-color: #ff0000;
+            color: #fff;
+            border: 5px dashed #fff;
+            padding: 20px 40px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.1s;
+        }
+
+        #enter-btn:hover {
+            background-color: #fff;
+            color: #ff0000;
+            border-color: #ff0000;
+            transform: scale(1.1);
+        }
+
+        /* Main Content Wrapper (Hidden initially) */
+        #main-content {
+            display: none;
+            min-height: 100vh;
             background-color: #ff00ff;
             animation: bg-seizure 2s infinite;
-            font-family: "Comic Sans MS", "Impact", cursive;
-            cursor: wait;
+            cursor: crosshair;
         }
 
         /* Animations zinzin */
@@ -47,7 +110,7 @@
 
         @keyframes flash-epilepsy {
             0% { opacity: 1; filter: invert(0%); }
-            50% { opacity: 0; filter: invert(100%); }
+            50% { opacity: 0.2; filter: invert(100%); }
             100% { opacity: 1; filter: invert(0%); }
         }
 
@@ -65,9 +128,10 @@
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        @keyframes marquee-crazy {
-            0% { transform: translateX(100vw) rotate(10deg); }
-            100% { transform: translateX(-100vw) rotate(-10deg); }
+        @keyframes glow-altar {
+            0% { box-shadow: 0 0 20px #00ffff, inset 0 0 20px #ffff00; }
+            50% { box-shadow: 0 0 100px #ff00ff, inset 0 0 80px #ff0000; }
+            100% { box-shadow: 0 0 20px #00ffff, inset 0 0 20px #ffff00; }
         }
 
         .spin { animation: spin 1s linear infinite; }
@@ -78,6 +142,7 @@
         .flash { animation: flash-epilepsy 0.1s infinite; }
         .shake { animation: shake 0.2s infinite; }
 
+        /* Typography & Layout */
         h1, h2, h3 {
             font-family: "Impact", sans-serif;
             text-transform: uppercase;
@@ -101,22 +166,31 @@
             width: 100vw;
             height: 100vh;
             object-fit: cover;
+            pointer-events: none;
         }
 
         .grid-mess {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 50px;
             padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .grid-mess img {
+            width: 100%;
+            height: auto;
         }
 
         marquee {
-            font-size: 5rem;
+            font-size: 4rem;
             font-weight: bold;
             background: yellow;
             color: red;
             border: 10px dotted blue;
             margin: 20px 0;
+            padding: 10px;
         }
         
         .crazy-border {
@@ -124,105 +198,154 @@
             border-radius: 50% 20% / 10% 40%;
         }
 
+        /* Sonic Altar */
+        .sonic-altar {
+            margin: 100px auto 50px auto;
+            max-width: 800px;
+            text-align: center;
+            background: radial-gradient(circle, #000 0%, #330033 100%);
+            padding: 40px;
+            border: 15px double gold;
+            border-radius: 40px;
+            animation: glow-altar 1.5s infinite alternate, shake 0.5s infinite;
+        }
+
+        .sonic-altar img {
+            width: 90%;
+            max-width: 600px;
+            border: 10px solid #fff;
+            border-radius: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 50px #ff0000;
+            transition: transform 0.3s;
+        }
+
+        .sonic-altar img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .altar-title {
+            color: #00ffff;
+            font-size: 3rem;
+            text-shadow: 0 0 10px #fff, 0 0 20px #00ffff;
+        }
+
+        /* Jumpscare Feature */
         .jumpscare-zoom {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.1);
+            transform: translate(-50%, -50%) scale(0.01);
             z-index: 999999999;
-            pointer-events: none; /* Pour ne pas bloquer les clics sur la page */
+            pointer-events: none;
             animation: ultimateZoom 3s cubic-bezier(0.5, 0, 1, 0.5) forwards;
             box-shadow: 0 0 500px 100px red;
             border-radius: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
         }
 
         @keyframes ultimateZoom {
             0% { transform: translate(-50%, -50%) scale(0.01) rotate(0deg); opacity: 0; filter: contrast(100%); }
             10% { opacity: 1; }
-            90% { opacity: 1; filter: contrast(500%) saturate(1000%) hue-rotate(90deg); }
-            100% { transform: translate(-50%, -50%) scale(30) rotate(720deg); opacity: 0; }
+            90% { opacity: 1; filter: contrast(500%) saturate(1000%) hue-rotate(90deg); transform: translate(-50%, -50%) scale(3) rotate(360deg); }
+            100% { transform: translate(-50%, -50%) scale(15) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <img src="d3ad2d8d-9f5f-48c4-b7b5-bee54447d6abfile_2902385.webp" class="fixed-bg spin-slow" alt="Shrek bg">
 
-    <marquee scrollamount="150" direction="right" class="shake">SKIBIDI RIZZ OHIO FINAL BOSS LEVEL 100 GYATT</marquee>
-    <marquee scrollamount="50" direction="down" style="height: 200px; background: cyan; position: absolute; left: 10%; width: 200px; z-index: 999;">
-        <h1 class="spin">QUOI LE CHIEN FAIT ???</h1>
-    </marquee>
-
-    <div style="text-align: center; margin-top: 50px;">
-        <h1 class="stretch" style="font-size: 10vw;">SIGMA MALE GRINDSET</h1>
-        <!-- <h2 class="bounce" style="color: pink; font-size: 5vw;">AMONG US SUS ඞඞඞ</h2> -->
+    <!-- ÉCRAN D'AVERTISSEMENT -->
+    <div id="warning-screen">
+        <h1>⚠️ AVERTISSEMENT ÉPILEPSIE & BRAINROT ⚠️</h1>
+        <p>
+            Ce site contient des lumières clignotantes intenses, des animations chaotiques, et un niveau de "brainrot" potentiellement dangereux pour votre santé mentale. 
+        </p>
+        <button id="enter-btn">Entrer à mes risques et périls</button>
     </div>
 
-    <div class="grid-mess">
-        <img src="1.jpg" class="spin crazy-border" style="width: 300px;" alt="Watermelon guy">
-        <img src="2.png" class="shake" style="width: 400px; filter: hue-rotate(90deg);" alt="Arabic grinch">
-        <img src="7.jpeg" class="stretch" style="width: 250px; border: 10px solid red;" alt="Minion moon">
+    <!-- CONTENU PRINCIPAL (Caché au départ) -->
+    <div id="main-content">
+        <img src="d3ad2d8d-9f5f-48c4-b7b5-bee54447d6abfile_2902385.webp" class="fixed-bg spin-slow" alt="Shrek bg">
+
+        <marquee scrollamount="120" direction="right" class="shake">SKIBIDI RIZZ OHIO FINAL BOSS LEVEL 100 GYATT</marquee>
         
-        <img src="8.jpeg" class="rev-spin" style="width: 350px; border-radius: 50%;" alt="Roblox class">
-        <div>
-            <h1 class="flash" style="font-size: 4rem;">BING CHILLING 🍦</h1>
-            <img src="9.jpeg" class="bounce" style="width: 300px;" alt="Triple T">
+        <marquee scrollamount="40" direction="down" style="height: 250px; background: cyan; position: absolute; left: 5%; width: 250px; z-index: 999; border: 5px solid red;">
+            <h1 class="spin">QUOI LE CHIEN FAIT ???</h1>
+        </marquee>
+
+        <div style="text-align: center; margin-top: 50px; position: relative; z-index: 10;">
+            <h1 class="stretch" style="font-size: clamp(3rem, 10vw, 8rem);">SIGMA MALE GRINDSET</h1>
         </div>
-        <img src="10.jpeg" class="shake crazy-border" style="width: 300px; transform: scaleX(-1);" alt="Prout clown">
+
+        <div class="grid-mess">
+            <img src="1.jpg" class="spin crazy-border" alt="Watermelon guy">
+            <img src="2.png" class="shake" style="filter: hue-rotate(90deg);" alt="Arabic grinch">
+            
+            <img src="4.png" class="rev-spin" style="border-radius: 50%;" alt="Roblox class">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h1 class="flash" style="font-size: 3rem;">BING CHILLING 🍦</h1>
+                <img src="7.jpeg" class="bounce" alt="Triple T">
+            </div>
+            <img src="4.png" class="spin-slow" style="border-radius: 30%;" alt="Bird Brainrot">
+            <img src="19.jpg" class="bounce" alt="Cat meme">
+        </div>
+
+        <marquee scrollamount="150" direction="left" class="flash" style="position: fixed; bottom: 0; margin: 0; width: 100vw; background: black; color: white; z-index: 9000;">
+            L+RATIO+NO MAIDENS+TOUCH GRASS+BOZO
+        </marquee>
+
+        <div style="position: fixed; top: 10px; right: 10px; background: rgba(255,0,255,0.8); padding: 20px; z-index: 9999; border: 5px solid lime;">
+            <h3 class="spin">FANUM TAX</h3>
+            <h3 class="rev-spin">MEWING STREAK 🤫🧏‍♂️</h3>
+        </div>
     </div>
-
-    <img src="3.jpg" class="absolute-chaos spin" style="top: 20%; right: 0%; width: 10vw;" alt="Laughing cat">
-    
-    <img src="4.png" class="absolute-chaos stretch" style="bottom: 10%; left: 5%; width: 10vw; z-index: 1000;" alt="Egg bird">
-    
-    <marquee scrollamount="200" direction="left" class="flash" style="position: fixed; bottom: 0; margin: 0; background: black; color: white;">
-        L+RATIO+NO MAIDENS+TOUCH GRASS+BOZO
-    </marquee>
-
-    <img src="14.png" class="absolute-chaos bounce" style="top: 50%; left: 40%; width: 100px; filter: saturate(500%);" alt="Weird creature">
-
-    <div style="position: fixed; top: 10px; right: 10px; background: rgba(255,0,255,0.8); padding: 20px; z-index: 9999; border: 5px solid lime;">
-        <h3 class="spin">FANUM TAX</h3>
-        <h3 class="rev-spin">MEWING STREAK 🤫🧏‍♂️</h3>
-    </div>
-
 
     <script>
+        // Array complet des images pour le jumpscare
         const brainrotImages = [
             "1.jpg",
             "2.png",
-            "3.ong",
+            "3.png",
             "4.png",
-            "5.jpeg",
-            "6.jpeg",
+            "5.jpg",
+            "6.jpg",
             "7.jpeg",
             "8.jpeg",
             "9.jpeg",
             "10.jpeg",
-            "11.jpeg",
+            "11.jpg",
             "12.jpg",
             "13.jpg",
             "14.jpg",
             "15.jpg",
             "16.jpg",
-            "17.jpg",
-            "18.jpg",
+            "17.png",
+            "18.png",
             "19.jpg",
             "20.jpg",
             "21.jpg",
             "22.jpg"
         ];
 
+        let jumpscareTimeout;
+
+        // Fonction pour déclencher le jumpscare
         function triggerBrainrotJumpscare() {
             // Créer l'élément image
             const img = document.createElement('img');
             
+            // Choisir une image aléatoire
             const randomIndex = Math.floor(Math.random() * brainrotImages.length);
             img.src = brainrotImages[randomIndex];
             
+            // Assigner la classe d'animation
             img.className = 'jumpscare-zoom';
             
+            // Ajouter à la page
             document.body.appendChild(img);
             
+            // Retirer l'image après 3 secondes (durée de l'animation) et programmer le suivant
             setTimeout(() => {
                 if (document.body.contains(img)) {
                     document.body.removeChild(img);
@@ -231,13 +354,30 @@
             }, 3000);
         }
 
+        // Fonction pour programmer le prochain jumpscare
         function scheduleNextJumpscare() {
+            // Entre 15 et 45 secondes (15000ms à 45000ms)
             const nextDelay = 15000 + Math.random() * 30000;
-            console.log(`Prochaine attaque dans ${Math.round(nextDelay/1000)} secondes...`);
-            setTimeout(triggerBrainrotJumpscare, nextDelay);
+            console.log(`[SIGMA ALERT] Prochaine attaque dans ${Math.round(nextDelay/1000)} secondes...`);
+            jumpscareTimeout = setTimeout(triggerBrainrotJumpscare, nextDelay);
         }
 
-        setTimeout(triggerBrainrotJumpscare, 10000); 
+        // Logique de l'écran d'avertissement
+        const warningScreen = document.getElementById('warning-screen');
+        const mainContent = document.getElementById('main-content');
+        const enterBtn = document.getElementById('enter-btn');
+
+        enterBtn.addEventListener('click', () => {
+            // Cacher l'écran d'avertissement
+            warningScreen.style.display = 'none';
+            
+            // Afficher le contenu principal (qui déclenchera alors toutes les animations CSS)
+            mainContent.style.display = 'block';
+
+            // Démarrer le premier jumpscare exactement 10 secondes APRÈS le clic
+            console.log("[SIGMA ALERT] Bienvenue dans la zone. Premier jumpscare dans 10 secondes.");
+            jumpscareTimeout = setTimeout(triggerBrainrotJumpscare, 10000);
+        });
     </script>
 </body>
 </html>
