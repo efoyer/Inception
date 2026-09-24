@@ -18,7 +18,6 @@
             background-color: #000;
         }
 
-        /* Warning Screen Styles */
         #warning-screen {
             position: fixed;
             top: 0;
@@ -50,6 +49,26 @@
             margin-bottom: 40px;
         }
 
+        .warning-gif {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 250px;
+            max-width: 25vw;
+            border: 5px dashed red;
+            border-radius: 4px;
+            box-shadow: 0 0 15px red;
+        }
+
+        .warning-gif-left {
+            left: 5%;
+        }
+
+        .warning-gif-right {
+            right: 5%;
+            transform: translateY(-50%) scaleX(-1);
+        }
+
         #enter-btn {
             background-color: #ff0000;
             color: #fff;
@@ -69,7 +88,6 @@
             transform: scale(1.1);
         }
 
-        /* Main Content Wrapper (Hidden initially) */
         #main-content {
             display: none;
             min-height: 100vh;
@@ -78,7 +96,6 @@
             cursor: crosshair;
         }
 
-        /* Animations zinzin */
         @keyframes bg-seizure {
             0% { background-color: #ff00ff; color: #00ff00; }
             25% { background-color: #00ffff; color: #ff0000; }
@@ -142,7 +159,6 @@
         .flash { animation: flash-epilepsy 0.1s infinite; }
         .shake { animation: shake 0.2s infinite; }
 
-        /* Typography & Layout */
         h1, h2, h3 {
             font-family: "Impact", sans-serif;
             text-transform: uppercase;
@@ -198,39 +214,7 @@
             border-radius: 50% 20% / 10% 40%;
         }
 
-        /* Sonic Altar */
-        .sonic-altar {
-            margin: 100px auto 50px auto;
-            max-width: 800px;
-            text-align: center;
-            background: radial-gradient(circle, #000 0%, #330033 100%);
-            padding: 40px;
-            border: 15px double gold;
-            border-radius: 40px;
-            animation: glow-altar 1.5s infinite alternate, shake 0.5s infinite;
-        }
 
-        .sonic-altar img {
-            width: 90%;
-            max-width: 600px;
-            border: 10px solid #fff;
-            border-radius: 20px;
-            margin-top: 20px;
-            box-shadow: 0 0 50px #ff0000;
-            transition: transform 0.3s;
-        }
-
-        .sonic-altar img:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .altar-title {
-            color: #00ffff;
-            font-size: 3rem;
-            text-shadow: 0 0 10px #fff, 0 0 20px #00ffff;
-        }
-
-        /* Jumpscare Feature */
         .jumpscare-zoom {
             position: fixed;
             top: 50%;
@@ -255,16 +239,17 @@
 </head>
 <body>
 
-    <!-- ÉCRAN D'AVERTISSEMENT -->
     <div id="warning-screen">
+        <img src="cat-engine.gif" alt="Crazy left" class="warning-gif warning-gif-left">
+        <img src="cat-engine.gif" alt="Crazy right" class="warning-gif warning-gif-right">
+        
         <h1>⚠️ AVERTISSEMENT ÉPILEPSIE & BRAINROT ⚠️</h1>
         <p>
             Ce site contient des lumières clignotantes intenses, des animations chaotiques, et un niveau de "brainrot" potentiellement dangereux pour votre santé mentale. 
         </p>
-        <button id="enter-btn">Entrer à mes risques et périls</button>
+        <button id="enter-btn">Entrer à mes risques et périls<br>(Je suis un Sigma)</button>
     </div>
 
-    <!-- CONTENU PRINCIPAL (Caché au départ) -->
     <div id="main-content">
         <img src="d3ad2d8d-9f5f-48c4-b7b5-bee54447d6abfile_2902385.webp" class="fixed-bg spin-slow" alt="Shrek bg">
 
@@ -302,7 +287,6 @@
     </div>
 
     <script>
-        // Array complet des images pour le jumpscare
         const brainrotImages = [
             "1.jpg",
             "2.png",
@@ -330,22 +314,18 @@
 
         let jumpscareTimeout;
 
-        // Fonction pour déclencher le jumpscare
+
         function triggerBrainrotJumpscare() {
-            // Créer l'élément image
+
             const img = document.createElement('img');
             
-            // Choisir une image aléatoire
             const randomIndex = Math.floor(Math.random() * brainrotImages.length);
             img.src = brainrotImages[randomIndex];
             
-            // Assigner la classe d'animation
             img.className = 'jumpscare-zoom';
             
-            // Ajouter à la page
             document.body.appendChild(img);
             
-            // Retirer l'image après 3 secondes (durée de l'animation) et programmer le suivant
             setTimeout(() => {
                 if (document.body.contains(img)) {
                     document.body.removeChild(img);
@@ -354,27 +334,21 @@
             }, 3000);
         }
 
-        // Fonction pour programmer le prochain jumpscare
         function scheduleNextJumpscare() {
-            // Entre 15 et 45 secondes (15000ms à 45000ms)
-            const nextDelay = 15000 + Math.random() * 30000;
+            const nextDelay = 15000 + Math.random() * 20000;
             console.log(`[SIGMA ALERT] Prochaine attaque dans ${Math.round(nextDelay/1000)} secondes...`);
             jumpscareTimeout = setTimeout(triggerBrainrotJumpscare, nextDelay);
         }
 
-        // Logique de l'écran d'avertissement
         const warningScreen = document.getElementById('warning-screen');
         const mainContent = document.getElementById('main-content');
         const enterBtn = document.getElementById('enter-btn');
 
         enterBtn.addEventListener('click', () => {
-            // Cacher l'écran d'avertissement
             warningScreen.style.display = 'none';
             
-            // Afficher le contenu principal (qui déclenchera alors toutes les animations CSS)
             mainContent.style.display = 'block';
 
-            // Démarrer le premier jumpscare exactement 10 secondes APRÈS le clic
             console.log("[SIGMA ALERT] Bienvenue dans la zone. Premier jumpscare dans 10 secondes.");
             jumpscareTimeout = setTimeout(triggerBrainrotJumpscare, 10000);
         });

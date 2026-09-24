@@ -98,6 +98,8 @@ services:
     networks:
       - inception
     restart: on-failure
+    ports:
+      - "8080:8080"
   
 volumes:
   wordpress:
