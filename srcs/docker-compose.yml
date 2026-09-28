@@ -100,6 +100,20 @@ services:
     restart: on-failure
     ports:
       - "8080:8080"
+  
+  portainer:
+    container_name: portainer
+    build:
+      context: requirements/bonus/portainer
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: on-failure
  
 volumes:
   wordpress:
@@ -114,6 +128,12 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '/home/efoyer/data/mariadb'
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/efoyer/data/portainer'
 
 networks:
   inception:
