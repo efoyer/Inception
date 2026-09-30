@@ -83,8 +83,6 @@ services:
     container_name: static_page
     networks:
       - inception
-    ports:
-      - "1080:80"
     restart: on-failure
     build:
       context: requirements/bonus/static_page
